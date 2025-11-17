@@ -103,6 +103,34 @@ public class TextureAtlas
                         }
                     }
                 }
+                var animationElements = root.Element("Animations").Elements("Animation");
+
+                if (animationElements != null)
+                {
+                    foreach (var animationElement in animationElements)
+                    {
+                        string name = animationElement.Attribute("name")?.Value;
+                        float delayInMilliseconds = float.Parse(animationElement.Attribute("delay")?.Value ?? "0");
+                        TimeSpan delay = TimeSpan.FromMilliseconds(delayInMilliseconds);
+
+                        List<TextureRegion> frames = new List<TextureRegion>();
+
+                        var frameElements = animationElement.Elements("Frame");
+
+                        if (frameElements != null)
+                        {
+                            foreach (var frameElement in frameElements)
+                            {
+                                string regionName = frameElement.Attribute("region").Value;
+                                TextureRegion region = atlas.GetRegion(regionName);
+                                frames.Add(region);
+                            }
+                        }
+
+                        Animation animation = new Animation(frames, delay);
+                        atlas.AddAnimation(name, animation);
+                    }
+                }
                 return atlas;
             }
         }
