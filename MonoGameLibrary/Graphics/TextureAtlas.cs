@@ -141,4 +141,10 @@ public class TextureAtlas
         TextureRegion region = GetRegion(regionName);
         return new Sprite(region);
     }
+
+    public AnimatedSprite CreateAnimatedSprite(string animationName)
+    {
+        Animation animation = GetAnimation(animationName);
+        return new AnimatedSprite(animation);
+    }
 }
