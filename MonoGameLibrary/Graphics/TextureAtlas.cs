@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -11,6 +12,9 @@ namespace MonoGameLibrary.Graphics;
 public class TextureAtlas
 {
     private Dictionary<string, TextureRegion> _regions;
+
+    private Dictionary<string, Animation> _animations;
+
     public Texture2D Texture
     {
         get; set;
@@ -19,12 +23,14 @@ public class TextureAtlas
     public TextureAtlas()
     {
         _regions = new Dictionary<string, TextureRegion>();
+        _animations = new Dictionary<string, Animation>();
     }
 
     public TextureAtlas(Texture2D texture)
     {
         Texture = texture;
         _regions = new Dictionary<string, TextureRegion>();
+        _animations = new Dictionary<string, Animation>();
     }
 
     public void AddRegion(string name, int x, int y, int width, int height)
@@ -46,6 +52,21 @@ public class TextureAtlas
     public void Clear()
     {
         _regions.Clear();
+    }
+
+    public void AddAnimation(string animationName, Animation animation)
+    {
+        _animations.Add(animationName, animation);
+    }
+
+    public Animation GetAnimation(string animationName)
+    {
+        return _animations[animationName];
+    }
+
+    public bool RemoveAnimation(string animationName)
+    {
+        return _animations.Remove(animationName);
     }
 
     public static TextureAtlas FromFile(ContentManager content, string fileName)
