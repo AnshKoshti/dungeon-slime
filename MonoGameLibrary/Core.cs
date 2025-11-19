@@ -21,7 +21,7 @@ public class Core : Game
 
     public static new ContentManager Content { get; private set; }
 
-    public static new InputManager Input { get; private set; }
+    public static InputManager Input { get; private set; }
 
     public static bool ExitOnEscape { get; set; }
 
