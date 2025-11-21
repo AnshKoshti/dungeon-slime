@@ -28,6 +28,8 @@ public class Game1 : Core
 
     private SoundEffect _collectSoundEffect;
 
+    private Song _themeSong;
+
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
 
@@ -53,6 +55,8 @@ public class Game1 : Core
         _batPosition = new Vector2(_roomBounds.Left, _roomBounds.Top);
 
         AssignRandomBatVelocity();
+
+        Audio.PlaySong(_themeSong);
     }
 
     protected override void LoadContent()
@@ -72,16 +76,7 @@ public class Game1 : Core
 
         _collectSoundEffect = Content.Load<SoundEffect>("audio/collect");
 
-        Song theme = Content.Load<Song>("audio/theme");
-
-        if (MediaPlayer.State == MediaState.Playing)
-        {
-            MediaPlayer.Stop();
-        }
-
-        MediaPlayer.Play(theme);
-
-        MediaPlayer.IsRepeating = true;
+        _themeSong = Content.Load<Song>("audio/theme");
     }
 
     protected override void Update(GameTime gameTime)
@@ -153,8 +148,7 @@ public class Game1 : Core
         {
             normal.Normalize();
             _batVelocity = Vector2.Reflect(_batVelocity, normal);
-
-            _bounceSoundEffect.Play();
+            Audio.PlaySoundEffect(_bounceSoundEffect);
         }
 
         _batPosition = newBatPosition;
@@ -168,20 +162,17 @@ public class Game1 : Core
 
             AssignRandomBatVelocity();
 
-            _collectSoundEffect.Play();
+            Audio.PlaySoundEffect(_collectSoundEffect);
         }
-
         base.Update(gameTime);
     }
 
     private void AssignRandomBatVelocity()
     {
         float angle = (float)(Random.Shared.NextDouble() * Math.PI * 2);
-
         float x = (float)Math.Cos(angle);
         float y = (float)Math.Sin(angle);
         Vector2 direction = new Vector2(x, y);
-
         _batVelocity = direction * MOVEMENT_SPEED;
     }
 
