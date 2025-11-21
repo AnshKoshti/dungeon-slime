@@ -3,9 +3,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameLibrary.Graphics;
 
-/// <summary>
-/// Represents a rectangular region within a texture.
-/// </summary>
 public class TextureRegion
 {
     public Texture2D Texture { get; set; }

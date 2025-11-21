@@ -1,7 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGameLibrary;
 using MonoGameLibrary.Graphics;
 
@@ -21,6 +23,10 @@ public class Game1 : Core
     private Tilemap _tilemap;
 
     private Rectangle _roomBounds;
+
+    private SoundEffect _bounceSoundEffect;
+
+    private SoundEffect _collectSoundEffect;
 
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
@@ -61,6 +67,21 @@ public class Game1 : Core
 
         _tilemap = Tilemap.FromFile(Content, "images/tilemap-definition.xml");
         _tilemap.Scale = new Vector2(4.0f, 4.0f);
+
+        _bounceSoundEffect = Content.Load<SoundEffect>("audio/bounce");
+
+        _collectSoundEffect = Content.Load<SoundEffect>("audio/collect");
+
+        Song theme = Content.Load<Song>("audio/theme");
+
+        if (MediaPlayer.State == MediaState.Playing)
+        {
+            MediaPlayer.Stop();
+        }
+
+        MediaPlayer.Play(theme);
+
+        MediaPlayer.IsRepeating = true;
     }
 
     protected override void Update(GameTime gameTime)
@@ -132,6 +153,8 @@ public class Game1 : Core
         {
             normal.Normalize();
             _batVelocity = Vector2.Reflect(_batVelocity, normal);
+
+            _bounceSoundEffect.Play();
         }
 
         _batPosition = newBatPosition;
@@ -144,6 +167,8 @@ public class Game1 : Core
             _batPosition = new Vector2(column * _bat.Width, row * _bat.Height);
 
             AssignRandomBatVelocity();
+
+            _collectSoundEffect.Play();
         }
 
         base.Update(gameTime);
